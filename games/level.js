@@ -1,14 +1,19 @@
-function Level(plan) {
+function Level(plan, number) {
+  this.number = number;
   this.width = 600;
   this.height = plan.height;
 
   this.player = new Player(new Vector(plan.player.x, plan.player.y));
+
+  this.mudda = new Mudda(new Vector(plan.mudda.x, plan.mudda.y));
 
   this.clouds = [];
   for (var i=0; i<plan.clouds.length; i++) {
       var cloud = new Cloud(new Vector(plan.clouds[i].x, plan.clouds[i].y));
       this.clouds.push(cloud);
   }
+
+  this.nGuitars = plan.guitars.length;
 
   this.guitars = [];
   for (var i=0; i<plan.guitars.length; i++) {
@@ -22,7 +27,7 @@ function Level(plan) {
       this.wasps.push(wasp);
   }
 
-  this.objects = this.wasps.concat(this.guitars);
+  this.objects = this.wasps.concat(this.guitars, this.mudda);
 
   this.status = this.finishDelay = null;
 };
@@ -88,5 +93,11 @@ Level.prototype.playerTouched = function(type, object) {
         this.guitars = this.guitars.filter(function(e) {
             return e !== object;}
         );
+    } else if (type == "mudda" && this.guitars.length == 0 && this.status == null) {
+        this.status = "won";
+        this.finishDelay = 1;
+    } else if (type == "mudda" && this.guitars.length > 0 && this.status == null) {
+        this.status = "lost";
+        this.finishDelay = 1;
     };
 };

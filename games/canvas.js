@@ -29,45 +29,63 @@ CanvasDisplay.prototype.drawFrame = function(step) {
   this.updateViewport();
   this.drawBackground(this.level);
   this.drawClouds();
+  this.drawNumbers();
   this.drawGuitars();
   this.drawWasps();
+  this.drawMudda()
   this.drawPlayer();
 };
 
 CanvasDisplay.prototype.updateViewport = function() {
   var view = this.viewport;
-  var margin = view.width / 3;
+   var margin1 = 0.3*view.height;
+  var margin2 = 0.5*view.height;
   var player = this.level.player;
   var center = player.pos.plus(player.size.times(0.5));
 
-  if (center.x < view.left + margin)
+  /*if (center.x < view.left + margin)
     view.left = Math.max(center.x - margin, 0);
   else if (center.x > view.left + view.width - margin)
     view.left = Math.min(center.x + margin - view.width,
-                         this.level.width - view.width);
-  if (center.y < view.top + margin)
-    view.top = Math.max(center.y - margin, 0);
-  else if (center.y > view.top + view.height - margin)
-    view.top = Math.min(center.y + margin - view.height,
+                         this.level.width - view.width);*/
+  if (center.y < view.top + margin1)
+    view.top = Math.max(center.y - margin1, 0);
+  else if (center.y > view.top + view.height - margin2)
+    view.top = Math.min(center.y + margin2 - view.height,
                         this.level.height - view.height);
 };
 
 CanvasDisplay.prototype.drawBackground = function(level) {
-  this.cx.fillStyle = "rgb(52, 166, 251)";
+  this.cx.fillStyle = "rgb(230, 242, 255)";
   this.cx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
+CanvasDisplay.prototype.drawNumbers = function() {
+    this.cx.fillStyle = "rgb(0, 0, 0)";
+    this.cx.font = "20px Arial";
+    var no2 = this.level.nGuitars;
+    var no1 = no2 - this.level.guitars.length;
+    this.cx.fillText(no1 + " / " + no2, 10, 30);
+    this.cx.fillText("Level " + this.level.number, 500, 30);
+}
+
 var cloudImg = document.createElement("img");
-cloudImg.src = "assets/cloud-small.png";
+cloudImg.src = "assets/cloud.png";
 
 var guitarImg = document.createElement("img");
-guitarImg.src = "assets/guitar-small.jpg"
+guitarImg.src = "assets/guitar.png"
 
 var waspImg = document.createElement("img");
-waspImg.src = "assets/wasp-small.jpg"
+waspImg.src = "assets/wasp.png"
 
-var playerImg = document.createElement("img");
-playerImg.src = "assets/fadda-small.png";
+var muddaImg = document.createElement("img");
+muddaImg.src = "assets/mudda.png"
+
+var playerNormalImg = document.createElement("img");
+playerNormalImg.src = "assets/fadda-normal.png";
+
+var playerParachuteImg = document.createElement("img");
+playerParachuteImg.src = "assets/fadda-parachute.png";
 
 /* the following part is somewhat repitive, is it possible to shorten that? */
 
@@ -98,8 +116,16 @@ CanvasDisplay.prototype.drawWasps = function() {
     }
 };
 
+CanvasDisplay.prototype.drawMudda = function() {
+    var x = this.level.mudda.pos.x - this.viewport.left;
+    var y = this.level.mudda.pos.y - this.viewport.top;
+    this.cx.drawImage(muddaImg, x, y);
+}
+
 CanvasDisplay.prototype.drawPlayer = function() {
     var x = this.level.player.pos.x - this.viewport.left;
     var y = this.level.player.pos.y - this.viewport.top;
-    this.cx.drawImage(playerImg, x, y)
+    var movementtype = this.level.player.movementType;
+    var playerImg = (movementtype=="normal") ? playerNormalImg : playerParachuteImg;
+    this.cx.drawImage(playerImg, x, y);
 };

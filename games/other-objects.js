@@ -1,20 +1,27 @@
 function Cloud(pos) {
   this.pos = pos;
-  this.size = new Vector(110, 60);
+  this.size = new Vector(99, 57);
 }
 
 Cloud.prototype.type = "cloud";
 
 function Guitar(pos) {
   this.pos = pos;
-  this.size = new Vector(30, 90);
+  this.size = new Vector(36, 102);
 }
 
 Guitar.prototype.type = "guitar";
 
+function Mudda(pos) {
+    this.pos = pos;
+    this.size = new Vector(37, 80);
+}
+
+Mudda.prototype.type = "mudda";
+
 function Wasp(pos) {
   this.pos = pos;
-  this.size = new Vector(40, 30);
+  this.size = new Vector(57, 35);
   var speedX =  randomBinary() * (Math.random() * 200 + 100);
   this.speed = new Vector(speedX, 0);
 }
