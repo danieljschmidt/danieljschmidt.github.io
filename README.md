@@ -1,4 +1,4 @@
-# Code for my [githutb website](danieljschmidt.github.io)
+# Code for my [github website](danieljschmidt.github.io)
 
 ## Bootrap template
 
